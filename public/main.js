@@ -57,14 +57,29 @@ let deck = [
 let playerHand = []
 let dealerHand = []
 
+let valueOfDealersHand = 0
+
 const dealCardToPlayer = () => {
   //-pop another card
   //-push it to the hand
   //add the card to the UI
-  let playerHandList = document.querySelector('.playerHand')
+  let playerHandList = document.querySelector('.player-hand')
   let card = deck.pop()
 
   playerHand.push(card)
+
+  let valueOfPlayersHand = 0
+  playerHand.forEach(card => {
+    valueOfPlayersHand += card.value
+  })
+
+  let playerHandTotal = document.querySelector('.player-hand-total')
+  playerHandTotal.textContent = valueOfPlayersHand
+
+  if (valueOfPlayersHand > 21) {
+    let gameStatus = document.querySelector('.game-status')
+    gameStatus.textContent = 'Player BUSTED!'
+  }
 
   //Add this card to the UI
 
@@ -77,7 +92,7 @@ const dealCardToPlayer = () => {
 }
 
 const dealCardToDealer = () => {
-  let dealerHandList = document.querySelector('.dealerHand')
+  let dealerHandList = document.querySelector('.dealer-hand')
   let card = deck.pop()
 
   dealerHand.push(card)
