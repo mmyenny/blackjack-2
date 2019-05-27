@@ -57,8 +57,6 @@ let deck = [
 let playerHand = []
 let dealerHand = []
 
-let valueOfDealersHand = 0
-
 const dealCardToPlayer = () => {
   //-pop another card
   //-push it to the hand
@@ -91,15 +89,25 @@ const dealCardToPlayer = () => {
   playerHandList.appendChild(newCardItem)
 }
 
-const dealCardToDealer = () => {
+const dealOneCardToDealer = () => {
   let dealerHandList = document.querySelector('.dealer-hand')
   let card = deck.pop()
-
   dealerHand.push(card)
+
   let newCardItem = document.createElement('li')
   newCardItem.textContent = `The ${card.face} of ${card.suit}`
   dealerHandList.appendChild(newCardItem)
+
+  let valueOfDealersHand = 0
+  dealerHand.forEach(card => {
+    valueOfDealersHand += card.value
+  })
+
+  let dealerHandTotal = document.querySelector('.dealer-hand-total')
+  dealerHandTotal.textContent = valueOfDealersHand
 }
+
+const dealCardToDealer = () => {}
 
 const main = () => {
   //Shuffle the deck into a random order
@@ -115,7 +123,10 @@ const main = () => {
 
   for (let count = 0; count < 2; count++) {
     dealCardToPlayer()
-    dealCardToDealer()
+  }
+
+  for (let count = 0; count < 2; count++) {
+    dealOneCardToDealer()
   }
 
   let hitButton = document

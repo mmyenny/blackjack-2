@@ -3,7 +3,11 @@
 }
 
 html {
-  height: 100%;
+  background-image: url(/assets/blackjack-background.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 100%;
 }
 
 body {
