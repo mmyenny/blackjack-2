@@ -113,6 +113,8 @@ const dealOneCardToDealer = () => {
 }
 
 const dealCardToDealer = () => {
+  document.querySelector('.dealer-hand').classList.add('.shown')
+
   while (getTheValueOfTheDealerHand() <= 17) {
     dealOneCardToDealer()
   }
@@ -123,7 +125,11 @@ const dealCardToDealer = () => {
     if (getTheValueOfThePlayerHand() > getTheValueOfTheDealerHand()) {
       declareWinnerOrLoser('Player WINS!')
     } else {
-      declareWinnerOrLoser('Dealer WINS!')
+      if (getTheValueOfTheDealerHand() === getTheValueOfThePlayerHand()) {
+        declareWinnerOrLoser(`It's a TIE!`)
+      } else {
+        declareWinnerOrLoser('Dealer WINS!')
+      }
     }
   }
 }
