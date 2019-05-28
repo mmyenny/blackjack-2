@@ -57,36 +57,46 @@ let deck = [
 let playerHand = []
 let dealerHand = []
 
+const declareWinnerOrLoser = message => {
+  let gameStatus = document.querySelector('.game-status')
+  gameStatus.textContent = message
+
+  document.querySelector('.hit').disabled = 'disable'
+  document.querySelector('.stay').disabled = 'disable'
+}
+
+const getTheValueOfThePlayerHand = () => {
+  let valueOfPlayersHand = 0
+  playerHand.forEach(card => {
+    valueOfPlayersHand += card.value
+  })
+  return valueOfPlayersHand
+}
+
 const dealCardToPlayer = () => {
-  //-pop another card
-  //-push it to the hand
-  //add the card to the UI
   let playerHandList = document.querySelector('.player-hand')
   let card = deck.pop()
 
   playerHand.push(card)
 
-  let valueOfPlayersHand = 0
-  playerHand.forEach(card => {
-    valueOfPlayersHand += card.value
-  })
-
   let playerHandTotal = document.querySelector('.player-hand-total')
-  playerHandTotal.textContent = valueOfPlayersHand
+  playerHandTotal.textContent = getTheValueOfThePlayerHand()
 
-  if (valueOfPlayersHand > 21) {
-    let gameStatus = document.querySelector('.game-status')
-    gameStatus.textContent = 'Player BUSTED!'
+  if (getTheValueOfThePlayerHand() > 21) {
+    declareWinnerOrLoser('Player BUSTED!')
   }
 
-  //Add this card to the UI
-
-  //create a new LI
   let newCardItem = document.createElement('li')
-  //make the text of the LI be the description of the card
   newCardItem.textContent = `The ${card.face} of ${card.suit}`
-  //append that lI to the UL
   playerHandList.appendChild(newCardItem)
+}
+
+const getTheValueOfTheDealerHand = () => {
+  let valueOfDealersHand = 0
+  dealerHand.forEach(card => {
+    valueOfDealersHand += card.value
+  })
+  return valueOfDealersHand
 }
 
 const dealOneCardToDealer = () => {
@@ -98,16 +108,25 @@ const dealOneCardToDealer = () => {
   newCardItem.textContent = `The ${card.face} of ${card.suit}`
   dealerHandList.appendChild(newCardItem)
 
-  let valueOfDealersHand = 0
-  dealerHand.forEach(card => {
-    valueOfDealersHand += card.value
-  })
-
   let dealerHandTotal = document.querySelector('.dealer-hand-total')
-  dealerHandTotal.textContent = valueOfDealersHand
+  dealerHandTotal.textContent = getTheValueOfTheDealerHand()
 }
 
-const dealCardToDealer = () => {}
+const dealCardToDealer = () => {
+  while (getTheValueOfTheDealerHand() <= 17) {
+    dealOneCardToDealer()
+  }
+
+  if (getTheValueOfTheDealerHand() > 21) {
+    declareWinnerOrLoser('Player WINS!')
+  } else {
+    if (getTheValueOfThePlayerHand() > getTheValueOfTheDealerHand()) {
+      declareWinnerOrLoser('Player WINS!')
+    } else {
+      declareWinnerOrLoser('Dealer WINS!')
+    }
+  }
+}
 
 const main = () => {
   //Shuffle the deck into a random order
@@ -129,12 +148,8 @@ const main = () => {
     dealOneCardToDealer()
   }
 
-  let hitButton = document
-    .querySelector('.hit')
-    .addEventListener('click', dealCardToPlayer)
-  let stayButton = document
-    .querySelector('.stay')
-    .addEventListener('click', dealCardToDealer)
+  document.querySelector('.hit').addEventListener('click', dealCardToPlayer)
+  document.querySelector('.stay').addEventListener('click', dealCardToDealer)
 }
 
 document.addEventListener('DOMContentLoaded', main)
